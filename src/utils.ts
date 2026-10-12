@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { callbackHostAllowed, parseHostList } from "./config.js";
 
@@ -13,7 +14,6 @@ export const safeId = z
     "ID must contain only alphanumeric characters, hyphens, and underscores"
   );
 
-/** 2348012345678 and 08012345678 are the same number. */
 // HTTPS only; if NOMBA_ALLOWED_CALLBACK_HOSTS is set, the host must be on it. A callback
 // URL decides where payment notifications or customers are sent, so injected text must
 // not be able to point it at an attacker.
@@ -26,9 +26,21 @@ export const callbackUrlSchema = z
     "Callback host is not in NOMBA_ALLOWED_CALLBACK_HOSTS"
   );
 
+/** 2348012345678 and 08012345678 are the same number. */
 export function normalisePhone(phone: string): string {
   const digits = phone.replace(/\D/g, "");
   return digits.startsWith("234") ? "0" + digits.slice(3) : digits;
+}
+
+/** Telcos accepted by the airtime and data endpoints. */
+export const NETWORKS = ["MTN", "AIRTEL", "GLO", "9MOBILE"] as const;
+
+/**
+ * Nomba requires a unique merchantTxRef on every outflow and uses it to deduplicate.
+ * Callers can pass their own; otherwise we generate one and return it in the result.
+ */
+export function newMerchantTxRef(): string {
+  return `mcp-${randomUUID()}`;
 }
 
 export function jsonResponse(data: unknown) {
@@ -45,9 +57,7 @@ export function errorResponse(error: unknown) {
   };
 }
 
-export function buildParams(
-  obj: Record<string, unknown>
-): Record<string, string> {
+export function buildParams(obj: Record<string, unknown>): Record<string, string> {
   const params: Record<string, string> = {};
   for (const [k, v] of Object.entries(obj)) {
     if (v !== undefined && v !== null) params[k] = String(v);
