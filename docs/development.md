@@ -15,8 +15,9 @@ npm ci --ignore-scripts
 | `npm run lint` / `npm run type-check` | ESLint / `tsc --noEmit` |
 | `npm run smoke` | Start the built server over MCP and check version, tool count, annotations, gating and zero runtime dependencies |
 | `node scripts/attack.mjs` | Hostile-input run against a fake API (see [security.md](security.md)) |
+| `node scripts/check-spec.mjs` | Checks every tool route exists in a pinned [NombaOSS/openapi](https://github.com/NombaOSS/openapi) release (needs network) |
 
-Run lint, type-check, test, build, smoke and the attack script before pushing; CI runs the same.
+Run lint, type-check, test, build, smoke, the attack script and the spec check before pushing; CI runs the same.
 
 ## Layout
 
@@ -25,7 +26,7 @@ Run lint, type-check, test, build, smoke and the attack script before pushing; C
 - `src/policy.ts`: which tools are gated, and their annotations
 - `src/spending-guard.ts`, `src/redact.ts`, `src/utils.ts`
 - `src/tools/`: one file per area; `src/resources/bank-list.ts`
-- `scripts/`: `bundle.mjs`, `smoke.mjs`, `attack.mjs`
+- `scripts/`: `bundle.mjs`, `smoke.mjs`, `attack.mjs`, `check-spec.mjs`
 
 ## Adding a tool
 
