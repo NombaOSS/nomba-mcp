@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [2.1.0] - 2026-11-03
 
 Every tool now calls the endpoint and sends the fields documented in Nomba's [API reference](https://developer.nomba.com/nomba-api-reference/introduction). Before this, many tools called paths that don't exist, so they failed against the live API. `src/tools/endpoints.test.ts` pins each tool to its documented method and path.
 
