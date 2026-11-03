@@ -1,6 +1,6 @@
 # nomba-mcp
 
-[![npm version](https://img.shields.io/npm/v/nomba-mcp.svg)](https://www.npmjs.com/package/nomba-mcp)
+[![npm version](https://img.shields.io/npm/v/@nombaoss/nomba-mcp.svg)](https://www.npmjs.com/package/@nombaoss/nomba-mcp)
 [![CI](https://github.com/NombaOSS/nomba-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/NombaOSS/nomba-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -26,7 +26,7 @@ AI app  <--stdio-->  nomba-mcp (runs on your machine)  <--HTTPS-->  Nomba API
      "mcpServers": {
        "nomba": {
          "command": "npx",
-         "args": ["-y", "nomba-mcp"],
+         "args": ["-y", "@nombaoss/nomba-mcp"],
          "env": {
            "NOMBA_CLIENT_ID": "your_client_id",
            "NOMBA_CLIENT_SECRET": "your_client_secret",

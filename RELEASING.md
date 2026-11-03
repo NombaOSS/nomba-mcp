@@ -25,12 +25,12 @@ The published file contains the MCP SDK and zod, so a Dependabot bump of either 
 Check the registry directly (a local `npm view` can be stale):
 
 ```bash
-curl -s https://registry.npmjs.org/nomba-mcp | node -e 'const d=JSON.parse(require("fs").readFileSync(0));const v=d["dist-tags"].latest;console.log(v,d.versions[v].dependencies??"no dependencies",d.versions[v].dist.attestations?"provenance":"NO provenance")'
+curl -s https://registry.npmjs.org/@nombaoss%2Fnomba-mcp | node -e 'const d=JSON.parse(require("fs").readFileSync(0));const v=d["dist-tags"].latest;console.log(v,d.versions[v].dependencies??"no dependencies",d.versions[v].dist.attestations?"provenance":"NO provenance")'
 ```
 
-Then confirm the tag and GitHub Release exist, and in an empty directory run `npm install nomba-mcp` (expect 1 package, 0 vulnerabilities).
+Then confirm the tag and GitHub Release exist, and in an empty directory run `npm install @nombaoss/nomba-mcp` (expect 1 package, 0 vulnerabilities).
 
 ## One-time setup (repo owner)
 
 - GitHub: create an environment named `npm-publish` with yourself as required reviewer, so a stolen login can't publish on its own.
-- npm: on npmjs.com, add a Trusted Publisher for `nomba-mcp` pointing at repo `NombaOSS/nomba-mcp`, workflow `publish.yml`, environment `npm-publish`. No npm token is stored anywhere.
+- npm: on npmjs.com, add a Trusted Publisher for `@nombaoss/nomba-mcp` pointing at repo `NombaOSS/nomba-mcp`, workflow `publish.yml`, environment `npm-publish`. No npm token is stored anywhere. npm can only add a Trusted Publisher to a package that already exists, so the very first publish of a new package name is done once by hand (`npm publish --access public` from a clean checkout, logged in as an org owner with 2FA); every later release goes through the workflow.
