@@ -34,3 +34,5 @@ Then confirm the tag and GitHub Release exist, and in an empty directory run `np
 
 - GitHub: create an environment named `npm-publish` with yourself as required reviewer, so a stolen login can't publish on its own.
 - npm: on npmjs.com, add a Trusted Publisher for `@nombaoss/nomba-mcp` pointing at repo `NombaOSS/nomba-mcp`, workflow `publish.yml`, environment `npm-publish`. No npm token is stored anywhere. npm can only add a Trusted Publisher to a package that already exists, so the very first publish of a new package name is done once by hand (`npm publish --access public` from a clean checkout, logged in as an org owner with 2FA); every later release goes through the workflow.
+
+After each release, bump the pinned version in `smithery.yaml` so hosted installs run the reviewed build, not whatever is `latest`.

@@ -22,7 +22,7 @@ startCommand:
   commandFunction: |
     (config) => ({
       command: 'npx',
-      args: ['-y', '@nombaoss/nomba-mcp'],
+      args: ['-y', '@nombaoss/nomba-mcp@2.0.1'],
       env: {
         NOMBA_CLIENT_ID: config.nombaClientId,
         NOMBA_CLIENT_SECRET: config.nombaClientSecret,
