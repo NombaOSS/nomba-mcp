@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1] - 2026-11-03
+
+### Changed
+
+- First release published from CI with npm provenance, under `@nombaoss/nomba-mcp`. No code changes from 2.0.0.
+
 ## [2.0.0] - 2026-10-31
 
 ### Breaking
