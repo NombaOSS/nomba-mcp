@@ -78,20 +78,28 @@ export function registerAirtimeTools(
     {
       title: "Buy Data Bundle",
       description:
-        "Purchase a data bundle for a Nigerian phone number. Use nomba_list_data_plans first to get the plan's productId and price.",
+        "Purchase a data bundle for a Nigerian phone number. Use nomba_list_data_plans first to get the plan's productId. The price is taken from Nomba's plan list, not from the caller.",
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         phoneNumber,
         dataPlanCode: z
           .string()
           .describe("The plan's productId from nomba_list_data_plans"),
-        amount: amountSchema(guard.config.maxTransaction, "The plan's price in Naira, from nomba_list_data_plans"),
         network,
       },
     },
-    async ({ phoneNumber, dataPlanCode, amount, network }) => {
+    async ({ phoneNumber, dataPlanCode, network }) => {
       logToolCall("nomba_buy_data", { phoneNumber, dataPlanCode, network });
       try {
+        // The spending cap is checked against the price Nomba lists, so a caller can't
+        // understate what a plan costs.
+        const plans = await client.get<{ data?: Array<{ productId?: string; amount?: number }> }>(
+          `/v1/bill/data-plan/${network.toLowerCase()}`
+        );
+        const amount = plans.data?.find((p) => p.productId === dataPlanCode)?.amount;
+        if (typeof amount !== "number" || !(amount > 0)) {
+          throw new Error(`No ${network} data plan with productId ${dataPlanCode}`);
+        }
         const body = {
           productId: dataPlanCode,
           amount,

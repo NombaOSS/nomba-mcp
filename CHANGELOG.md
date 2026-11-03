@@ -18,7 +18,7 @@ Every tool now calls the endpoint and sends the fields documented in Nomba's [AP
 
 ### Changed (breaking)
 
-- `nomba_buy_airtime` and `nomba_buy_data` require `network`, and `nomba_buy_data` requires `amount` (the plan price), so data purchases now count against the spending cap instead of a purchase count.
+- `nomba_buy_airtime` and `nomba_buy_data` require `network`, and `nomba_buy_data` no longer takes a price: it reads the plan's price from Nomba and counts that against the spending cap, instead of a purchase count.
 - `nomba_transfer_to_bank` requires `accountName` (from `nomba_lookup_bank_account`), and `nomba_charge_tokenized_card` requires `callbackUrl`.
 - Virtual-account tools take `identifier` (accountRef or account number) instead of `accountId`, and the update tool no longer takes `callbackUrl`.
 - `nomba_get_sub_account` takes `accountRef`, and the terminal tools take `serialNumber`.

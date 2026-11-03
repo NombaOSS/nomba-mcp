@@ -190,7 +190,7 @@ const EXPECTED: Array<
   ["nomba_list_data_plans", { network: "GLO" }, "GET", "/v1/bill/data-plan/glo"],
   [
     "nomba_buy_data",
-    { phoneNumber: "08012345678", dataPlanCode: "p1", amount: 500, network: "MTN" },
+    { phoneNumber: "08012345678", dataPlanCode: "p1", network: "MTN" },
     "POST",
     "/v2/bill/data",
   ],
@@ -208,6 +208,9 @@ function setup() {
     (method: string) =>
     async (path: string, ...args: unknown[]) => {
       calls.push({ method, path, args });
+      if (path.startsWith("/v1/bill/data-plan/")) {
+        return { code: "00", data: [{ plan: "1GB", amount: 500, productId: "p1" }] };
+      }
       return { code: "00", data: {} };
     };
   const client = {
@@ -253,8 +256,9 @@ describe("tool endpoints match the official API reference", () => {
     const { tools, calls } = setup();
     const result = await tools.get(tool)!(input);
     expect(result.isError, JSON.stringify(result)).toBeFalsy();
-    expect(calls).toHaveLength(1);
-    expect(calls[0]).toMatchObject({ method, path });
+    // buying data first reads the plan price from Nomba
+    expect(calls).toHaveLength(tool === "nomba_buy_data" ? 2 : 1);
+    expect(calls.at(-1)).toMatchObject({ method, path });
   });
 
   it("outflows send a merchantTxRef", async () => {
@@ -271,7 +275,7 @@ describe("tool endpoints match the official API reference", () => {
       const [, input] = EXPECTED.find((e) => e[0] === name)!;
       await tools.get(name)!(input);
     }
-    for (const call of calls) {
+    for (const call of calls.filter((c) => c.method === "POST")) {
       expect((call.args[0] as any).merchantTxRef, call.path).toMatch(/^mcp-/);
     }
   });

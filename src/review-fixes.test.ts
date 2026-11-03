@@ -107,7 +107,10 @@ describe("money tools go through the guard", () => {
   function setup() {
     const tools = new Map<string, (...a: any[]) => any>();
     const server = { registerTool: (n: string, _c: unknown, cb: any) => void tools.set(n, cb) } as any;
-    const client = { post: vi.fn().mockResolvedValue({ code: "00" }) } as unknown as NombaClient;
+    const client = {
+      post: vi.fn().mockResolvedValue({ code: "00" }),
+      get: vi.fn().mockResolvedValue({ data: [{ productId: "p1", amount: 100 }] }),
+    } as unknown as NombaClient;
     const g = guard();
     registerCheckoutTools(server, client, g);
     registerAirtimeTools(server, client, g);
@@ -125,10 +128,19 @@ describe("money tools go through the guard", () => {
   it("counts data purchases against the cap and blocks duplicates", async () => {
     const { tools, client } = setup();
     const buy = tools.get("nomba_buy_data")!;
-    const args = { phoneNumber: "08012345678", dataPlanCode: "p1", amount: 100, network: "MTN" };
+    const args = { phoneNumber: "08012345678", dataPlanCode: "p1", network: "MTN" };
     expect((await buy(args)).isError).toBeUndefined();
     expect((await buy(args)).isError).toBe(true);
     expect((client.post as any).mock.calls).toHaveLength(1);
+    // the amount sent and counted is the listed price
+    expect((client.post as any).mock.calls[0][1].amount).toBe(100);
+  });
+
+  it("rejects a data plan Nomba doesn't list", async () => {
+    const { tools, client } = setup();
+    const r = await tools.get("nomba_buy_data")!({ phoneNumber: "08012345678", dataPlanCode: "nope", network: "MTN" });
+    expect(r.isError).toBe(true);
+    expect((client.post as any).mock.calls).toHaveLength(0);
   });
 
   it("does not spend the outbound cap when creating a payment link", async () => {
