@@ -31,3 +31,5 @@ jobs:
       - run: npm run smoke
       # Hostile-input run against a fake API and an "evil" listener.
       - run: node scripts/attack.mjs
+      # Every tool route must exist in a pinned NombaOSS/openapi release.
+      - run: node scripts/check-spec.mjs

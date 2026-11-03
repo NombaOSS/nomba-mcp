@@ -9,7 +9,7 @@ MCP server (TypeScript, stdio) over the Nomba payments API. Threat model: indire
 - Public repo: don't name private Nomba repos.
 
 ## Before pushing
-`npm run lint && npm run type-check && npm test && npm run build && npm run smoke && node scripts/attack.mjs`
+`npm run lint && npm run type-check && npm test && npm run build && npm run smoke && node scripts/attack.mjs && node scripts/check-spec.mjs`
 
 ## Safety invariants
 - Money-moving and account-changing tools go in `SENSITIVE_TOOLS` (`src/policy.ts`) and stay unregistered unless `NOMBA_ENABLE_SENSITIVE_TOOLS=true`. Update `SENSITIVE_COUNT` in `scripts/smoke.mjs` and `docs/tools.md` with it.
