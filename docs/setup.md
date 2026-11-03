@@ -18,7 +18,7 @@ Keep the secret out of git. Put it in your app's user-level config, not in a pro
 
 ## 2. Add the server to your AI app
 
-The server runs locally over stdio: `npx -y nomba-mcp` (Node 24 or later). The same `env` block goes in each app.
+The server runs locally over stdio: `npx -y @nombaoss/nomba-mcp` (Node 24 or later). The same `env` block goes in each app.
 
 ### Claude Desktop
 
@@ -32,7 +32,7 @@ Edit the config file, then restart the app.
   "mcpServers": {
     "nomba": {
       "command": "npx",
-      "args": ["-y", "nomba-mcp"],
+      "args": ["-y", "@nombaoss/nomba-mcp"],
       "env": {
         "NOMBA_CLIENT_ID": "your_client_id",
         "NOMBA_CLIENT_SECRET": "your_client_secret",
@@ -50,7 +50,7 @@ claude mcp add nomba --scope user \
   -e NOMBA_CLIENT_ID=your_client_id \
   -e NOMBA_CLIENT_SECRET=your_client_secret \
   -e NOMBA_ACCOUNT_ID=your_account_id \
-  -- npx -y nomba-mcp
+  -- npx -y @nombaoss/nomba-mcp
 ```
 
 `--scope user` keeps the secret out of the project directory.
@@ -64,7 +64,7 @@ claude mcp add nomba --scope user \
   "mcpServers": {
     "nomba": {
       "command": "npx",
-      "args": ["-y", "nomba-mcp"],
+      "args": ["-y", "@nombaoss/nomba-mcp"],
       "env": {
         "NOMBA_CLIENT_ID": "your_client_id",
         "NOMBA_CLIENT_SECRET": "your_client_secret",
@@ -88,7 +88,7 @@ claude mcp add nomba --scope user \
     "nomba": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "nomba-mcp"],
+      "args": ["-y", "@nombaoss/nomba-mcp"],
       "env": {
         "NOMBA_CLIENT_ID": "your_client_id",
         "NOMBA_CLIENT_SECRET": "${input:nomba-secret}",
@@ -110,7 +110,7 @@ claude mcp add nomba --scope user \
 ```toml
 [mcp_servers.nomba]
 command = "npx"
-args = ["-y", "nomba-mcp"]
+args = ["-y", "@nombaoss/nomba-mcp"]
 
 [mcp_servers.nomba.env]
 NOMBA_CLIENT_ID = "your_client_id"

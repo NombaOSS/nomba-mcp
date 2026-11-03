@@ -2,7 +2,7 @@
 
 ## A tool I expect isn't there
 
-Money-moving tools are off by default. Set `NOMBA_ENABLE_SENSITIVE_TOOLS=true` and restart your client. Otherwise, restart the client after any config change and check the command is `npx` with args `["-y", "nomba-mcp"]`.
+Money-moving tools are off by default. Set `NOMBA_ENABLE_SENSITIVE_TOOLS=true` and restart your client. Otherwise, restart the client after any config change and check the command is `npx` with args `["-y", "@nombaoss/nomba-mcp"]`.
 
 ## "Missing required environment variables"
 

@@ -1,5 +1,5 @@
 // Bundles the server, the MCP SDK and zod into build/index.js, so the published
-// package has no runtime dependencies: `npx nomba-mcp` installs
+// package has no runtime dependencies: `npx @nombaoss/nomba-mcp` installs
 // exactly the code that was built and tested, not whatever versions of ~60
 // transitive packages resolve on the day. Also writes the bundled packages'
 // licence notices next to it, as their MIT/ISC licences require.

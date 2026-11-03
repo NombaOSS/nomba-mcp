@@ -4,6 +4,7 @@
 
 ### Breaking
 
+- **The package moved to `@nombaoss/nomba-mcp`** under the NombaOSS organisation. Change `nomba-mcp` to `@nombaoss/nomba-mcp` in the `npx` arguments of your client config. The unscoped `nomba-mcp` stays at 1.x and is deprecated.
 - **Money-moving and account-changing tools are off by default.** Transfers, airtime, data, electricity, cable, betting, refunds, card charges, checkout orders, sub-account and virtual-account changes and terminal assignment (20 tools) are only available when you set `NOMBA_ENABLE_SENSITIVE_TOOLS=true`. Text from Nomba (narrations, account names) can be written by third parties, so an injected instruction could otherwise get an assistant to pay someone. 21 read-only tools stay on.
 - **Node 24 or later** is required.
 - **Stricter start-up checks:** a zero, negative or non-numeric `NOMBA_MAX_TRANSACTION` or `NOMBA_SESSION_SPENDING_CAP` now stops the server instead of silently using the default, and the base URL host must be `sandbox.nomba.com` or `api.nomba.com` unless `NOMBA_ALLOW_INSECURE=true`.

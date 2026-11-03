@@ -3,7 +3,7 @@
 Requires Node 24 or later.
 
 ```bash
-git clone https://github.com/samaxbytez/nomba-mcp.git
+git clone https://github.com/NombaOSS/nomba-mcp.git
 cd nomba-mcp
 npm ci --ignore-scripts
 ```

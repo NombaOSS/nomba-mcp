@@ -1,5 +1,5 @@
 {
-  "name": "nomba-mcp",
+  "name": "@nombaoss/nomba-mcp",
   "version": "2.0.0",
   "description": "MCP server for the Nomba banking/payments API",
   "type": "module",
@@ -24,11 +24,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/samaxbytez/nomba-mcp.git"
+    "url": "https://github.com/NombaOSS/nomba-mcp.git"
   },
-  "homepage": "https://github.com/samaxbytez/nomba-mcp",
+  "homepage": "https://github.com/NombaOSS/nomba-mcp",
   "bugs": {
-    "url": "https://github.com/samaxbytez/nomba-mcp/issues"
+    "url": "https://github.com/NombaOSS/nomba-mcp/issues"
   },
   "scripts": {
     "build": "node scripts/bundle.mjs",
