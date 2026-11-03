@@ -33,4 +33,4 @@ Then confirm the tag and GitHub Release exist, and in an empty directory run `np
 ## One-time setup (repo owner)
 
 - GitHub: create an environment named `npm-publish` with yourself as required reviewer, so a stolen login can't publish on its own.
-- npm: on npmjs.com, add a Trusted Publisher for `nomba-mcp` pointing at repo `samaxbytez/nomba-mcp`, workflow `publish.yml`, environment `npm-publish`. No npm token is stored anywhere.
+- npm: on npmjs.com, add a Trusted Publisher for `nomba-mcp` pointing at repo `NombaOSS/nomba-mcp`, workflow `publish.yml`, environment `npm-publish`. No npm token is stored anywhere.
