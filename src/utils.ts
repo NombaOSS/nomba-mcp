@@ -32,8 +32,23 @@ export function normalisePhone(phone: string): string {
   return digits.startsWith("234") ? "0" + digits.slice(3) : digits;
 }
 
-/** Telcos accepted by the airtime and data endpoints. */
-export const NETWORKS = ["MTN", "AIRTEL", "GLO", "9MOBILE"] as const;
+/** limit and cursor for list endpoints. */
+export const pagingSchema = {
+  limit: z
+    .number()
+    .int()
+    .positive()
+    .max(MAX_PAGE_SIZE)
+    .optional()
+    .describe(`Number of results per page (max ${MAX_PAGE_SIZE})`),
+  cursor: z.string().optional().describe("Pagination cursor from a previous response"),
+};
+
+/** A Naira amount, capped by the per-transaction limit so every money tool enforces it. */
+export function amountSchema(max: number, description: string, whole = false) {
+  const n = whole ? z.number().int() : z.number();
+  return n.positive().max(max).describe(description);
+}
 
 /**
  * Nomba requires a unique merchantTxRef on every outflow and uses it to deduplicate.
@@ -41,6 +56,11 @@ export const NETWORKS = ["MTN", "AIRTEL", "GLO", "9MOBILE"] as const;
  */
 export function newMerchantTxRef(): string {
   return `mcp-${randomUUID()}`;
+}
+
+/** A 32-character reference for things Nomba keys by accountRef. */
+export function newAccountRef(): string {
+  return randomUUID().replaceAll("-", "");
 }
 
 export function jsonResponse(data: unknown) {
@@ -57,7 +77,9 @@ export function errorResponse(error: unknown) {
   };
 }
 
-export function buildParams(obj: Record<string, unknown>): Record<string, string> {
+export function buildParams(
+  obj: Record<string, unknown>
+): Record<string, string> {
   const params: Record<string, string> = {};
   for (const [k, v] of Object.entries(obj)) {
     if (v !== undefined && v !== null) params[k] = String(v);

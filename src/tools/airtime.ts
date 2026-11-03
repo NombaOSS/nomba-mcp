@@ -5,11 +5,14 @@ import {
   jsonResponse,
   errorResponse,
   logToolCall,
-  NETWORKS,
   newMerchantTxRef,
   normalisePhone,
+  amountSchema,
 } from "../utils.js";
 import { SpendingGuard } from "../spending-guard.js";
+
+/** Telcos accepted by the airtime and data endpoints. */
+const NETWORKS = ["MTN", "AIRTEL", "GLO", "9MOBILE"] as const;
 
 const phoneNumber = z
   .string()
@@ -32,11 +35,7 @@ export function registerAirtimeTools(
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         phoneNumber,
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Amount of airtime in Naira"),
+        amount: amountSchema(guard.config.maxTransaction, "Amount of airtime in Naira"),
         network,
       },
     },
@@ -86,11 +85,7 @@ export function registerAirtimeTools(
         dataPlanCode: z
           .string()
           .describe("The plan's productId from nomba_list_data_plans"),
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("The plan's price in Naira, from nomba_list_data_plans"),
+        amount: amountSchema(guard.config.maxTransaction, "The plan's price in Naira, from nomba_list_data_plans"),
         network,
       },
     },

@@ -278,17 +278,6 @@ describe("NombaClient - HTTP methods", () => {
     expect(opts.body).toBe('{"amount":100}');
   });
 
-  it("patch() sends PATCH method", async () => {
-    mockFetch
-      .mockResolvedValueOnce(mockOk(tokenResponse()))
-      .mockResolvedValueOnce(mockOk({ data: "ok" }));
-
-    const client = createClient();
-    await client.patch("/v1/test", { name: "new" });
-
-    const opts = mockFetch.mock.calls[1][1] as RequestInit;
-    expect(opts.method).toBe("PATCH");
-  });
 });
 
 describe("NombaClient - HTTPS enforcement", () => {

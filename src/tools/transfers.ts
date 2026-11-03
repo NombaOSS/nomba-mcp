@@ -7,6 +7,7 @@ import {
   logToolCall,
   safeId,
   newMerchantTxRef,
+  amountSchema,
 } from "../utils.js";
 import { assertRecipientAllowed } from "../config.js";
 import { SpendingGuard } from "../spending-guard.js";
@@ -84,11 +85,7 @@ export function registerTransferTools(
         "Transfer funds from the parent Nomba account to an external Nigerian bank account. Amount is in Naira (NGN). Call nomba_lookup_bank_account first and pass its accountName. The result status may be SUCCESS or PENDING_BILLING; use nomba_requery_transaction with the sessionId to confirm.",
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Amount in Naira to transfer"),
+        amount: amountSchema(guard.config.maxTransaction, "Amount in Naira to transfer"),
         accountNumber: z
           .string()
           .length(10)
@@ -143,11 +140,7 @@ export function registerTransferTools(
         "Transfer funds from the parent account to another Nomba account (wallet/P2P transfer). Settles near-instantly. Amount is in Naira (NGN). Wallet transfers return no sessionId; use nomba_get_transaction with the merchantTxRef to check status.",
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Amount in Naira to transfer"),
+        amount: amountSchema(guard.config.maxTransaction, "Amount in Naira to transfer"),
         destinationAccountId: safeId.describe("Receiving Nomba account ID (UUID)"),
         narration: z.string().optional().describe("Transfer description/narration"),
         merchantTxRef,

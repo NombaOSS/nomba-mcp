@@ -6,6 +6,7 @@ import {
   errorResponse,
   logToolCall,
   newMerchantTxRef,
+  amountSchema,
 } from "../../utils.js";
 import { SpendingGuard } from "../../spending-guard.js";
 
@@ -71,12 +72,7 @@ export function registerBettingTools(
       inputSchema: {
         customerId,
         providerCode,
-        amount: z
-          .number()
-          .int()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Amount in whole Naira to fund"),
+        amount: amountSchema(guard.config.maxTransaction, "Amount in whole Naira to fund", true),
         payerName: z.string().optional().describe("Name of the person paying"),
         phoneNumber: z.string().optional().describe("Customer's phone number"),
       },

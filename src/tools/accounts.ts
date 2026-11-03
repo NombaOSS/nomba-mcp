@@ -6,11 +6,15 @@ import {
   errorResponse,
   logToolCall,
   buildParams,
+  pagingSchema,
   safeId,
 } from "../utils.js";
 import { redactResponse, PARENT_ACCOUNT_RULES } from "../redact.js";
 
-export function registerAccountTools(server: McpServer, client: NombaClient): void {
+export function registerAccountTools(
+  server: McpServer,
+  client: NombaClient
+): void {
   server.registerTool(
     "nomba_get_parent_account",
     {
@@ -57,17 +61,7 @@ export function registerAccountTools(server: McpServer, client: NombaClient): vo
         "List POS terminals assigned to the parent Nomba account. Returns terminal IDs, serial numbers, and labels. Supports pagination.",
       annotations: { readOnlyHint: true, destructiveHint: false },
       inputSchema: {
-        limit: z
-          .number()
-          .int()
-          .positive()
-          .max(50)
-          .optional()
-          .describe("Number of results per page (max 50)"),
-        cursor: z
-          .string()
-          .optional()
-          .describe("Pagination cursor from a previous response"),
+        ...pagingSchema,
       },
     },
     async ({ limit, cursor }) => {

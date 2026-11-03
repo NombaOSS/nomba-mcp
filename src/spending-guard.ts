@@ -2,7 +2,7 @@ export interface SpendingGuardConfig {
   maxTransaction: number;
   sessionSpendingCap: number;
   duplicateWindowMs: number;
-  /** Purchases with no known price (data bundles, full refunds) allowed per session. */
+  /** Purchases with no known price (full refunds) allowed per session. */
   maxUnpricedPerSession?: number;
 }
 

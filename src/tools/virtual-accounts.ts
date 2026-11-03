@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { NombaClient } from "../client.js";
@@ -7,6 +6,8 @@ import {
   errorResponse,
   logToolCall,
   buildParams,
+  newAccountRef,
+  pagingSchema,
   safeId,
 } from "../utils.js";
 import { redactResponse, VIRTUAL_ACCOUNT_RULES } from "../redact.js";
@@ -52,7 +53,7 @@ export function registerVirtualAccountTools(
       try {
         const body: Record<string, unknown> = {
           accountName,
-          accountRef: accountRef ?? randomUUID().replaceAll("-", ""),
+          accountRef: accountRef ?? newAccountRef(),
           currency: "NGN",
         };
         if (expectedAmount !== undefined) body.expectedAmount = expectedAmount;
@@ -159,17 +160,7 @@ export function registerVirtualAccountTools(
         accountName: z.string().optional().describe("Filter by account name"),
         accountRef: z.string().optional().describe("Filter by accountRef"),
         expired: z.boolean().optional().describe("Filter by expired status"),
-        limit: z
-          .number()
-          .int()
-          .positive()
-          .max(50)
-          .optional()
-          .describe("Number of results per page (max 50)"),
-        cursor: z
-          .string()
-          .optional()
-          .describe("Pagination cursor from a previous response"),
+        ...pagingSchema,
       },
     },
     async ({ accountName, accountRef, expired, limit, cursor }) => {

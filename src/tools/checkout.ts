@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { NombaClient } from "../client.js";
-import { jsonResponse, errorResponse, logToolCall, safeId, callbackUrlSchema } from "../utils.js";
+import { jsonResponse, errorResponse, logToolCall, safeId, callbackUrlSchema, amountSchema } from "../utils.js";
 import { redactResponse, CHECKOUT_RULES } from "../redact.js";
 import { SpendingGuard } from "../spending-guard.js";
 
@@ -23,11 +23,7 @@ export function registerCheckoutTools(
         "Create a checkout payment order and get a payment link (checkoutLink). The customer can use this link to pay via card, bank transfer, or USSD. Amount is in Naira (NGN).",
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Payment amount in Naira"),
+        amount: amountSchema(guard.config.maxTransaction, "Payment amount in Naira"),
         customerEmail: z.string().email().describe("Customer's email address"),
         callbackUrl,
         orderReference: z.string().optional().describe("Your unique order reference/ID"),
@@ -75,11 +71,7 @@ export function registerCheckoutTools(
         "Charge a previously saved/tokenized card. Use this for recurring payments or returning customers who saved their card during checkout.",
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Amount in Naira to charge"),
+        amount: amountSchema(guard.config.maxTransaction, "Amount in Naira to charge"),
         tokenizedCardId: safeId.describe(
           "The card's tokenKey, returned when the card was tokenized at checkout"
         ),
@@ -119,12 +111,8 @@ export function registerCheckoutTools(
       annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         transactionId: safeId.describe("The transaction ID to refund"),
-        amount: z
-          .number()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .optional()
-          .describe("Amount to refund in Naira. Omit for full refund."),
+        amount: amountSchema(guard.config.maxTransaction, "Amount to refund in Naira. Omit for full refund.")
+          .optional(),
       },
     },
     async ({ transactionId, amount }) => {

@@ -6,19 +6,13 @@ import {
   errorResponse,
   logToolCall,
   buildParams,
+  pagingSchema,
   safeId,
 } from "../utils.js";
 import { redactResponse, TRANSACTION_RULES } from "../redact.js";
 
 const paging = {
-  limit: z
-    .number()
-    .int()
-    .positive()
-    .max(50)
-    .optional()
-    .describe("Number of results per page (max 50)"),
-  cursor: z.string().optional().describe("Pagination cursor from a previous response"),
+  ...pagingSchema,
   dateFrom: z
     .string()
     .optional()

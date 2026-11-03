@@ -11,7 +11,7 @@ All settings are environment variables set in your MCP client's `env` block.
 | `NOMBA_ENABLE_SENSITIVE_TOOLS` | No | off | `true` registers the 16 money-moving and account-changing tools. See [tools.md](tools.md) |
 | `NOMBA_MAX_TRANSACTION` | No | `100000` | Largest single amount (NGN) a tool accepts |
 | `NOMBA_SESSION_SPENDING_CAP` | No | `500000` | Total NGN the server will spend in one session |
-| `NOMBA_MAX_UNPRICED_PURCHASES` | No | `10` | Data bundles and full refunds have no known price, so they are limited by count per session |
+| `NOMBA_MAX_UNPRICED_PURCHASES` | No | `10` | Full refunds have no known price, so they are limited by count per session |
 | `NOMBA_ALLOWED_CALLBACK_HOSTS` | No | none | Comma-separated hosts (and their subdomains) that callback URLs may use. Unset means any HTTPS host. Set it before enabling sensitive tools |
 | `NOMBA_ALLOWED_RECIPIENTS` | No | none | Comma-separated recipients transfers may go to: `bankCode:accountNumber` for bank transfers (for example `058:0123456789`) and a Nomba account ID for internal transfers. Unset means any recipient. Set it before enabling sensitive tools |
 | `NOMBA_PRODUCTION_CONFIRMED` | No | none | Must be `true` when the base URL is `api.nomba.com` |

@@ -50,6 +50,13 @@ describe("tool policy", () => {
     }
   });
 
+  it("gates every destructive tool", () => {
+    const destructive = Object.entries(build(true))
+      .filter(([, t]) => t.annotations?.destructiveHint === true)
+      .map(([n]) => n);
+    for (const n of destructive) expect(SENSITIVE_TOOLS.has(n), n).toBe(true);
+  });
+
   it("keeps lookups read-only", () => {
     const tools = build(false);
     expect(tools["nomba_lookup_bank_account"].annotations?.readOnlyHint).toBe(true);

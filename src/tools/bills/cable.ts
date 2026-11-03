@@ -6,6 +6,7 @@ import {
   errorResponse,
   logToolCall,
   newMerchantTxRef,
+  amountSchema,
 } from "../../utils.js";
 import { SpendingGuard } from "../../spending-guard.js";
 
@@ -91,12 +92,7 @@ export function registerCableTools(
       inputSchema: {
         smartcardNumber,
         providerCode,
-        amount: z
-          .number()
-          .int()
-          .positive()
-          .max(guard.config.maxTransaction)
-          .describe("Amount in whole Naira to pay"),
+        amount: amountSchema(guard.config.maxTransaction, "Amount in whole Naira to pay", true),
         payerName: z.string().optional().describe("Name of the person paying"),
       },
     },

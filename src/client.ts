@@ -236,10 +236,6 @@ export class NombaClient {
     return this.request<T>("PUT", path, body);
   }
 
-  async patch<T = unknown>(path: string, body: unknown): Promise<T> {
-    return this.request<T>("PATCH", path, body);
-  }
-
   async delete<T = unknown>(path: string): Promise<T> {
     return this.request<T>("DELETE", path);
   }
