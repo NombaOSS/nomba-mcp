@@ -50,7 +50,7 @@ export function registerElectricityTools(
     async ({ meterNumber, providerCode }) => {
       logToolCall("nomba_lookup_electricity_customer", { meterNumber, providerCode });
       try {
-        const result = await client.get("/v1/bill/electricity/lookup", {
+        const result = await client.get("/v2/bill/electricity/lookup", {
           disco: providerCode,
           customerId: meterNumber,
         });

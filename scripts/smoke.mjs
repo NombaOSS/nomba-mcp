@@ -6,14 +6,14 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
-const SENSITIVE_COUNT = 20;
+const SENSITIVE_COUNT = 16;
 const SENSITIVE_SAMPLE = [
   "nomba_transfer_to_bank",
   "nomba_transfer_between_accounts",
   "nomba_buy_airtime",
   "nomba_refund_transaction",
   "nomba_charge_tokenized_card",
-  "nomba_suspend_sub_account",
+  "nomba_expire_virtual_account",
 ];
 const failures = [];
 const check = (ok, message) => ok || failures.push(message);

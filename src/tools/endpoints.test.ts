@@ -146,7 +146,7 @@ const EXPECTED: Array<
     "nomba_lookup_electricity_customer",
     { meterNumber: "m1", providerCode: "ikedc" },
     "GET",
-    "/v1/bill/electricity/lookup",
+    "/v2/bill/electricity/lookup",
   ],
   [
     "nomba_buy_electricity",

@@ -1,99 +1,99 @@
 # Tools
 
-41 tools: 21 are always on, and 20 are off until you set `NOMBA_ENABLE_SENSITIVE_TOOLS=true` (see [security.md](security.md)). The table marks which is which.
+39 tools: 23 are always on, and 16 are off until you set `NOMBA_ENABLE_SENSITIVE_TOOLS=true` (see [security.md](security.md)). The table marks which is which.
 
 Every tool carries MCP annotations (`readOnlyHint`, `destructiveHint`, `openWorldHint`) so clients can ask for confirmation. List and filter tools take paging arguments; check the response for more pages before treating a list as complete.
+
+Each endpoint is pinned to Nomba's [API reference](https://developer.nomba.com/nomba-api-reference/introduction) by `src/tools/endpoints.test.ts`.
 
 ### Accounts & Terminals (5 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_get_parent_account` | No | Get parent account details (ID, name, type, status, linked banks) | `GET /v1/accounts/parent` |
-| `nomba_get_parent_balance` | No | Get current balance of parent account (NGN) | `GET /v1/accounts/parent/balance` |
-| `nomba_list_terminals` | No | List all POS terminals assigned to the account | `GET /v1/accounts/terminals` |
-| `nomba_assign_terminal` | Yes | Assign a POS terminal by ID and serial number | `POST /v1/terminals/assign` |
-| `nomba_unassign_terminal` | Yes | Unassign a POS terminal | `POST /v1/terminals/unassign` |
+| `nomba_get_parent_account` | No | Fetch the parent account details for the authenticated Nomba business. | `GET /v1/accounts/parent` |
+| `nomba_get_parent_balance` | No | Fetch the current balance of the parent Nomba business account. | `GET /v1/accounts/balance` |
+| `nomba_list_terminals` | No | List POS terminals assigned to the parent Nomba account. | `GET /v1/accounts/terminals` |
+| `nomba_assign_terminal` | Yes | Assign a POS terminal to the parent Nomba account using its serial number. | `POST /v1/terminals/assign` |
+| `nomba_unassign_terminal` | Yes | Unassign a POS terminal from the parent Nomba account using its serial number. | `POST /v1/terminals/unassign` |
 
-### Sub-Accounts (7 tools)
+### Sub-Accounts (3 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_create_sub_account` | Yes | Create a new sub-account with name, optional email/phone | `POST /v1/accounts` |
-| `nomba_list_sub_accounts` | No | List all sub-accounts with pagination | `GET /v1/accounts` |
-| `nomba_get_sub_account` | No | Get details of a specific sub-account | `GET /v1/accounts/{accountId}` |
-| `nomba_get_sub_account_balance` | No | Get current balance of a sub-account | `GET /v1/accounts/{accountId}/balance` |
-| `nomba_update_sub_account` | Yes | Update sub-account name, email, or phone | `PUT /v1/accounts/{accountId}` |
-| `nomba_suspend_sub_account` | Yes | Suspend a sub-account (blocks all transactions) | `PUT /v1/accounts/{accountId}/suspend` |
-| `nomba_reactivate_sub_account` | Yes | Reactivate a previously suspended sub-account | `PUT /v1/accounts/{accountId}/reactivate` |
+| `nomba_get_sub_account` | No | Fetch details of a sub-account by the accountRef it was created with. | `GET /v1/accounts/sub-account-details` |
+| `nomba_get_sub_account_balance` | No | Fetch the current balance of a specific sub-account. | `GET /v1/accounts/{accountId}/balance` |
+| `nomba_list_sub_account_terminals` | No | List POS terminals assigned to a sub-account. | `GET /v1/accounts/{accountId}/terminals` |
 
 ### Transfers (4 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_list_banks` | No | Fetch all Nigerian bank codes and names | `GET /v1/transfers/banks` |
-| `nomba_lookup_bank_account` | No | Validate account number and get holder name (call before transfers) | `POST /v1/transfers/bank-account-lookup` |
-| `nomba_transfer_to_bank` | Yes | Transfer funds to an external Nigerian bank account | `POST /v1/transfers/to-banks` |
-| `nomba_transfer_between_accounts` | Yes | Transfer funds between Nomba accounts (e.g., parent to sub-account) | `POST /v1/transfers/between-accounts` |
+| `nomba_list_banks` | No | Fetch the list of all Nigerian bank codes and names. | `GET /v1/transfers/banks` |
+| `nomba_lookup_bank_account` | No | Validate a bank account by looking up the account holder's name. | `POST /v1/transfers/bank/lookup` |
+| `nomba_transfer_to_bank` | Yes | Transfer funds from the parent Nomba account to an external Nigerian bank account. | `POST /v2/transfers/bank` |
+| `nomba_transfer_between_accounts` | Yes | Transfer funds from the parent account to another Nomba account (wallet/P2P transfer). | `POST /v2/transfers/wallet` |
 
 ### Online Checkout (5 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_create_checkout_order` | Yes | Create payment link (card, bank transfer, or USSD) | `POST /v1/checkout/order` |
-| `nomba_charge_tokenized_card` | Yes | Charge a previously saved card for recurring payments | `POST /v1/checkout/charge-tokenized-card` |
-| `nomba_refund_transaction` | Yes | Process full or partial refund for a checkout transaction | `POST /v1/checkout/refund` |
-| `nomba_get_checkout_transaction` | No | Get checkout transaction details and status | `GET /v1/checkout/order/{orderReference}` |
-| `nomba_cancel_transaction` | Yes | Cancel an incomplete/pending checkout transaction | `POST /v1/checkout/cancel-transaction` |
+| `nomba_create_checkout_order` | Yes | Create a checkout payment order and get a payment link (checkoutLink). | `POST /v1/checkout/order` |
+| `nomba_charge_tokenized_card` | Yes | Charge a previously saved/tokenized card. | `POST /v1/checkout/tokenized-card-payment` |
+| `nomba_refund_transaction` | Yes | Process a refund for a completed checkout transaction. | `POST /v1/checkout/refund` |
+| `nomba_get_checkout_transaction` | No | Retrieve the details and status of a checkout transaction by its order reference. | `GET /v1/checkout/transaction` |
+| `nomba_cancel_transaction` | Yes | Cancel an incomplete or pending checkout order. | `POST /v1/checkout/order/cancel` |
 
 ### Virtual Accounts (5 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_create_virtual_account` | Yes | Create a new virtual bank account | `POST /v1/accounts/virtual` |
-| `nomba_get_virtual_account` | No | Get virtual account details and balance | `GET /v1/accounts/virtual/{accountId}` |
-| `nomba_update_virtual_account` | Yes | Update account name or callback URL | `PATCH /v1/accounts/virtual/{accountId}` |
-| `nomba_expire_virtual_account` | Yes | Permanently deactivate a virtual account | `POST /v1/accounts/virtual/{accountId}/expire` |
-| `nomba_list_virtual_accounts` | No | List all virtual accounts with pagination | `GET /v1/accounts/virtual` |
+| `nomba_create_virtual_account` | Yes | Create a new virtual bank account under the parent Nomba account. | `POST /v1/accounts/virtual` |
+| `nomba_get_virtual_account` | No | Fetch details of a specific virtual account by its accountRef or bank account number. | `GET /v1/accounts/virtual/{identifier}` |
+| `nomba_update_virtual_account` | Yes | Update an existing virtual account's name, reference, or expected amount. | `PUT /v1/accounts/virtual/{identifier}` |
+| `nomba_expire_virtual_account` | Yes | Expire/deactivate a virtual account so it can no longer receive payments. | `DELETE /v1/accounts/virtual/{identifier}` |
+| `nomba_list_virtual_accounts` | No | List or filter virtual accounts under the parent Nomba account. | `POST /v1/accounts/virtual/list` |
 
 ### Transactions (4 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_list_bank_transactions` | No | List transaction history with optional date filtering | `GET /v1/transactions/bank` |
-| `nomba_requery_transaction` | No | Check transaction status by session ID | `POST /v1/transactions/accounts` |
-| `nomba_get_transaction` | No | Get full details of a single transaction | `GET /v1/transactions/{transactionId}` |
-| `nomba_filter_transactions` | No | Filter transactions by type (CREDIT/DEBIT), date range | `GET /v1/transactions/filter` |
+| `nomba_list_bank_transactions` | No | Fetch credit/debit (bank) transactions for the parent Nomba account. | `GET /v1/transactions/bank` |
+| `nomba_requery_transaction` | No | Confirm the status of a transaction using its session ID. | `GET /v1/transactions/requery/{sessionId}` |
+| `nomba_get_transaction` | No | Fetch a single transaction on the parent account by its Nomba transaction reference or your merchantTxRef. | `GET /v1/transactions/accounts/single` |
+| `nomba_filter_transactions` | No | List or filter transactions on the parent account by status, type, source, terminal or reference, with date range and pagination. | `POST /v1/transactions/accounts` |
 
 ### Bills - Electricity (3 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_get_electricity_providers` | No | List available electricity distribution companies | `GET /v1/bills/electricity/providers` |
-| `nomba_lookup_electricity_customer` | No | Validate meter number and get customer name | `POST /v1/bills/electricity/customer-lookup` |
-| `nomba_buy_electricity` | Yes | Purchase electricity tokens (prepaid) or pay bill (postpaid) | `POST /v1/bills/electricity/pay` |
+| `nomba_get_electricity_providers` | No | Fetch the list of available electricity distribution companies (DisCos). | `GET /v1/bill/electricity/discos` |
+| `nomba_lookup_electricity_customer` | No | Validate an electricity meter number and get the customer's name. | `GET /v2/bill/electricity/lookup` |
+| `nomba_buy_electricity` | Yes | Purchase electricity tokens for a prepaid meter or pay a postpaid electricity bill. | `POST /v2/bill/electricity` |
 
-### Bills - Cable TV (3 tools)
-
-| Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
-|------|-------|-------------|----------|
-| `nomba_get_cable_providers` | No | List available cable TV providers (DSTV, GOtv, Startimes) | `GET /v1/bills/cabletv/providers` |
-| `nomba_lookup_cable_customer` | No | Validate smartcard/IUC number and get customer name | `POST /v1/bills/cabletv/customer-lookup` |
-| `nomba_pay_cable_subscription` | Yes | Pay for a cable TV subscription | `POST /v1/bills/cabletv/pay` |
-
-### Bills - Betting (2 tools)
+### Bills - Cable TV (4 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_get_betting_providers` | No | List available betting platforms | `GET /v1/bills/betting/providers` |
-| `nomba_fund_betting_account` | Yes | Fund a customer's betting account | `POST /v1/bills/betting/pay` |
+| `nomba_get_cable_providers` | No | List the supported cable TV providers (DSTV, GOtv, Startimes, Showmax). | none (fixed list) |
+| `nomba_list_cable_plans` | No | Fetch the subscription plans (bouquets) and prices for a cable TV provider. | `GET /v1/bill/cableTvProduct` |
+| `nomba_lookup_cable_customer` | No | Validate a cable TV smartcard/IUC number and get the customer's name. | `GET /v1/bill/cabletv/lookup` |
+| `nomba_pay_cable_subscription` | Yes | Pay for a cable TV subscription (DSTV, GOtv, Startimes, Showmax). | `POST /v2/bill/cabletv` |
+
+### Bills - Betting (3 tools)
+
+| Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
+|------|-------|-------------|----------|
+| `nomba_get_betting_providers` | No | Fetch the list of available betting platforms. | `GET /v1/bill/betting/providers` |
+| `nomba_lookup_betting_customer` | No | Validate a betting account and get the customer's name. | `GET /v1/bill/betting/lookup` |
+| `nomba_fund_betting_account` | Yes | Fund a customer's betting account on a supported betting platform. | `POST /v2/bill/betting` |
 
 ### Airtime & Data (3 tools)
 
 | Tool | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` | Description | API endpoint |
 |------|-------|-------------|----------|
-| `nomba_buy_airtime` | Yes | Purchase airtime for a Nigerian phone number (MTN, Airtel, Glo, 9mobile) | `POST /v1/bills/airtime/pay` |
-| `nomba_list_data_plans` | No | List available data plans for a network provider | `GET /v1/bills/data/plans` |
-| `nomba_buy_data` | Yes | Purchase a data bundle for a phone number | `POST /v1/bills/data/pay` |
+| `nomba_buy_airtime` | Yes | Purchase airtime/credit for a Nigerian phone number from the parent account. | `POST /v2/bill/topup` |
+| `nomba_list_data_plans` | No | Fetch available data bundle plans for a network provider. | `GET /v1/bill/data-plan/{network}` |
+| `nomba_buy_data` | Yes | Purchase a data bundle for a Nigerian phone number. | `POST /v2/bill/data` |
 
 ## Resource
 
@@ -104,5 +104,4 @@ Every tool carries MCP annotations (`readOnlyHint`, `destructiveHint`, `openWorl
 - "What's my Nomba account balance?"
 - "Show me my last 10 transactions."
 - "Look up account 0123456789 at Access Bank."
-- "List my sub-accounts."
 - With sensitive tools on: "Buy 1000 Naira airtime for 08012345678." or "Transfer 5000 Naira to account 0123456789 at GTBank."

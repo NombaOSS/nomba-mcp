@@ -8,7 +8,7 @@ All settings are environment variables set in your MCP client's `env` block.
 | `NOMBA_CLIENT_SECRET` | Yes | none | Client secret from the dashboard |
 | `NOMBA_ACCOUNT_ID` | Yes | none | Parent account ID (UUID) |
 | `NOMBA_BASE_URL` | No | `https://sandbox.nomba.com` | API base URL. `https://api.nomba.com` is production |
-| `NOMBA_ENABLE_SENSITIVE_TOOLS` | No | off | `true` registers the 20 money-moving and account-changing tools. See [tools.md](tools.md) |
+| `NOMBA_ENABLE_SENSITIVE_TOOLS` | No | off | `true` registers the 16 money-moving and account-changing tools. See [tools.md](tools.md) |
 | `NOMBA_MAX_TRANSACTION` | No | `100000` | Largest single amount (NGN) a tool accepts |
 | `NOMBA_SESSION_SPENDING_CAP` | No | `500000` | Total NGN the server will spend in one session |
 | `NOMBA_MAX_UNPRICED_PURCHASES` | No | `10` | Data bundles and full refunds have no known price, so they are limited by count per session |
