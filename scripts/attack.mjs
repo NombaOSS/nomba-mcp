@@ -134,7 +134,7 @@ async function run({ sensitive, redirect }) {
   const allowed = new Set(["host", "connection", "accept", "accept-language", "sec-fetch-mode", "user-agent", "accept-encoding", "content-type", "content-length", "authorization", "accountid"]);
   for (const h of apiHits) {
     const u = new URL(h.url, base);
-    if (!u.pathname.startsWith("/v1/")) problems.push(`path escape: ${h.url}`);
+    if (!/^\/v[12]\//.test(u.pathname)) problems.push(`path escape: ${h.url}`);
     if (/\.\./.test(u.pathname) || /%2e/i.test(u.pathname)) problems.push(`traversal in: ${h.url}`);
     if (u.searchParams.has("inj")) problems.push(`injected query: ${h.url}`);
     for (const n of Object.keys(h.headers)) if (!allowed.has(n)) problems.push(`unexpected header ${n} on ${h.url}`);

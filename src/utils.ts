@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { callbackHostAllowed, parseHostList } from "./config.js";
 
@@ -13,7 +14,6 @@ export const safeId = z
     "ID must contain only alphanumeric characters, hyphens, and underscores"
   );
 
-/** 2348012345678 and 08012345678 are the same number. */
 // HTTPS only; if NOMBA_ALLOWED_CALLBACK_HOSTS is set, the host must be on it. A callback
 // URL decides where payment notifications or customers are sent, so injected text must
 // not be able to point it at an attacker.
@@ -26,9 +26,41 @@ export const callbackUrlSchema = z
     "Callback host is not in NOMBA_ALLOWED_CALLBACK_HOSTS"
   );
 
+/** 2348012345678 and 08012345678 are the same number. */
 export function normalisePhone(phone: string): string {
   const digits = phone.replace(/\D/g, "");
   return digits.startsWith("234") ? "0" + digits.slice(3) : digits;
+}
+
+/** limit and cursor for list endpoints. */
+export const pagingSchema = {
+  limit: z
+    .number()
+    .int()
+    .positive()
+    .max(MAX_PAGE_SIZE)
+    .optional()
+    .describe(`Number of results per page (max ${MAX_PAGE_SIZE})`),
+  cursor: z.string().optional().describe("Pagination cursor from a previous response"),
+};
+
+/** A Naira amount, capped by the per-transaction limit so every money tool enforces it. */
+export function amountSchema(max: number, description: string, whole = false) {
+  const n = whole ? z.number().int() : z.number();
+  return n.positive().max(max).describe(description);
+}
+
+/**
+ * Nomba requires a unique merchantTxRef on every outflow and uses it to deduplicate.
+ * Callers can pass their own; otherwise we generate one and return it in the result.
+ */
+export function newMerchantTxRef(): string {
+  return `mcp-${randomUUID()}`;
+}
+
+/** A 32-character reference for things Nomba keys by accountRef. */
+export function newAccountRef(): string {
+  return randomUUID().replaceAll("-", "");
 }
 
 export function jsonResponse(data: unknown) {

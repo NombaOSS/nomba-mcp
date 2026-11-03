@@ -6,7 +6,7 @@ The risk is **indirect prompt injection**. Text that Nomba returns (transaction 
 
 ## What protects you
 
-- **Money tools are off by default.** Transfers, airtime, data, electricity, cable, betting, refunds, card charges, checkout orders, sub-account and virtual-account changes, and terminal assignment (20 tools, listed in [tools.md](tools.md)) are not registered unless `NOMBA_ENABLE_SENSITIVE_TOOLS=true`. With it off, the assistant has no tool that can send money.
+- **Money tools are off by default.** Transfers, airtime, data, electricity, cable, betting, refunds, card charges, checkout orders, virtual-account changes, and terminal assignment (16 tools, listed in [tools.md](tools.md)) are not registered unless `NOMBA_ENABLE_SENSITIVE_TOOLS=true`. With it off, the assistant has no tool that can send money.
 - **Spending limits.** Once money tools are enabled, a per-transaction maximum, a session cap and duplicate detection (same amount and recipient within 60 seconds) apply to transfers, airtime, bills, betting, card charges and refunds. The amount is reserved before the call, so parallel calls can't slip past the cap, and it stays counted after a timeout or 5xx because the money may have moved. Data bundles and full refunds have no known price, so they are limited by count (`NOMBA_MAX_UNPRICED_PURCHASES`).
 - **Recipient allowlist.** Set `NOMBA_ALLOWED_RECIPIENTS` and transfers can only go to the accounts you list, however the request is phrased. Unset, any recipient is allowed.
 - **Callback hosts.** Set `NOMBA_ALLOWED_CALLBACK_HOSTS` so injected text can't redirect payment notifications or customers to an attacker's URL.

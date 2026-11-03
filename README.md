@@ -4,9 +4,9 @@
 [![CI](https://github.com/NombaOSS/nomba-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/NombaOSS/nomba-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An MCP server for the [Nomba API](https://developer.nomba.com). It lets an AI assistant check balances, read transactions, look up bank accounts and, if you allow it, pay people, buy airtime and bills, and manage sub-accounts and virtual accounts.
+An MCP server for the [Nomba API](https://developer.nomba.com). It lets an AI assistant check balances, read transactions, look up bank accounts and, if you allow it, pay people, buy airtime and bills, and manage virtual accounts.
 
-**Money tools are off by default.** Text from Nomba (narrations, account names) can be written by third parties, so the 20 tools that move money or change the account only exist when you set `NOMBA_ENABLE_SENSITIVE_TOOLS=true`. It starts in the sandbox. See [docs/security.md](docs/security.md).
+**Money tools are off by default.** Text from Nomba (narrations, account names) can be written by third parties, so the 16 tools that move money or change the account only exist when you set `NOMBA_ENABLE_SENSITIVE_TOOLS=true`. It starts in the sandbox. See [docs/security.md](docs/security.md).
 
 ## How it fits together
 
@@ -46,14 +46,14 @@ Step by step, including Claude Code, Cursor, VS Code, Windsurf, Codex CLI and Ge
 | Area | Always on | Needs `NOMBA_ENABLE_SENSITIVE_TOOLS` |
 |------|-----------|--------------------------------------|
 | Account | details, balance, terminals list | assign / unassign terminal |
-| Sub-accounts | list, get, balance | create, update, suspend, reactivate |
+| Sub-accounts | get, balance, terminals | none |
 | Transfers | bank list, account name lookup | transfer to bank, between Nomba accounts |
 | Checkout | get transaction | create order, charge saved card, refund, cancel |
 | Virtual accounts | get, list | create, update, expire |
 | Transactions | list, filter, get, requery | none |
-| Bills | provider lists, meter and smartcard lookup, data plans | electricity, cable, betting, airtime, data |
+| Bills | provider and plan lists, meter, smartcard and betting-account lookup, data plans | electricity, cable, betting, airtime, data |
 
-41 tools in total, 21 on by default. Full list: [docs/tools.md](docs/tools.md).
+39 tools in total, 23 on by default. Full list: [docs/tools.md](docs/tools.md).
 
 ## Settings
 

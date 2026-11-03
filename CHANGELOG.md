@@ -1,5 +1,32 @@
 # Changelog
 
+## [Unreleased]
+
+Every tool now calls the endpoint and sends the fields documented in Nomba's [API reference](https://developer.nomba.com/nomba-api-reference/introduction). Before this, many tools called paths that don't exist, so they failed against the live API. `src/tools/endpoints.test.ts` pins each tool to its documented method and path.
+
+### Fixed
+
+- **Endpoint paths:** balance (`/v1/accounts/balance`), bank lookup (`/v1/transfers/bank/lookup`), requery, single transaction, transaction filter, saved-card charge (`/v1/checkout/tokenized-card-payment`), checkout status, order cancel, virtual-account update (`PUT`), expire (`DELETE`) and list, and all bills under `/v1/bill/*` and `/v2/bill/*`.
+- **Transfers, airtime, data and bills** use the v2 endpoints, send the documented field names and a `merchantTxRef` (generated if you don't pass one, and returned with the result), so Nomba can deduplicate a retry.
+- `nomba_filter_transactions` uses the documented status, type and source filters.
+- The guard still wraps every money call: the allowlist check, the spending cap and duplicate detection are unchanged.
+
+### Added
+
+- `nomba_list_cable_plans`, `nomba_lookup_betting_customer` and `nomba_list_sub_account_terminals`.
+- Pagination on `nomba_list_terminals`, filters on `nomba_list_virtual_accounts`, and `expectedAmount` on virtual accounts.
+
+### Changed (breaking)
+
+- `nomba_buy_airtime` and `nomba_buy_data` require `network`, and `nomba_buy_data` no longer takes a price: it reads the plan's price from Nomba and counts that against the spending cap, instead of a purchase count.
+- `nomba_transfer_to_bank` requires `accountName` (from `nomba_lookup_bank_account`), and `nomba_charge_tokenized_card` requires `callbackUrl`.
+- Virtual-account tools take `identifier` (accountRef or account number) instead of `accountId`, and the update tool no longer takes `callbackUrl`.
+- `nomba_get_sub_account` takes `accountRef`, and the terminal tools take `serialNumber`.
+
+### Removed
+
+- `nomba_create_sub_account`, `nomba_list_sub_accounts`, `nomba_update_sub_account`, `nomba_suspend_sub_account` and `nomba_reactivate_sub_account`. They are not in Nomba's published reference, which says sub-accounts are created and managed from the dashboard. That leaves 16 gated tools (39 in total).
+
 ## [2.0.1] - 2026-11-03
 
 ### Changed

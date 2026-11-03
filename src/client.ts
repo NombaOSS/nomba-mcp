@@ -224,15 +224,19 @@ export class NombaClient {
     return this.request<T>("GET", path, undefined, params);
   }
 
-  async post<T = unknown>(path: string, body: unknown): Promise<T> {
-    return this.request<T>("POST", path, body);
+  async post<T = unknown>(
+    path: string,
+    body: unknown,
+    params?: Record<string, string>
+  ): Promise<T> {
+    return this.request<T>("POST", path, body, params);
   }
 
   async put<T = unknown>(path: string, body: unknown): Promise<T> {
     return this.request<T>("PUT", path, body);
   }
 
-  async patch<T = unknown>(path: string, body: unknown): Promise<T> {
-    return this.request<T>("PATCH", path, body);
+  async delete<T = unknown>(path: string): Promise<T> {
+    return this.request<T>("DELETE", path);
   }
 }
