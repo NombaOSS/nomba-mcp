@@ -1,4 +1,9 @@
-# nomba-mcp
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NombaOSS/nomba-mcp/main/.github/assets/banner-dark.svg">
+  <img alt="Nomba MCP Server" src="https://raw.githubusercontent.com/NombaOSS/nomba-mcp/main/.github/assets/banner-light.svg" width="100%">
+</picture>
+
+# Nomba MCP Server
 
 [![npm version](https://img.shields.io/npm/v/@nombaoss/nomba-mcp.svg)](https://www.npmjs.com/package/@nombaoss/nomba-mcp)
 [![CI](https://github.com/NombaOSS/nomba-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/NombaOSS/nomba-mcp/actions/workflows/ci.yml)
@@ -54,6 +59,16 @@ Step by step, including Claude Code, Cursor, VS Code, Windsurf, Codex CLI and Ge
 | Bills | provider and plan lists, meter, smartcard and betting-account lookup, data plans | electricity, cable, betting, airtime, data |
 
 39 tools in total, 23 on by default. Full list: [docs/tools.md](docs/tools.md).
+
+## Building with an AI coding agent?
+
+Install the [Nomba agent skills](https://github.com/NombaOSS/skills) so Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI and other agents write Nomba integrations the safe way: idempotency references, requery on timeouts, refunds only when final, and webhook verification.
+
+```bash
+npx skills add NombaOSS/skills
+```
+
+In Claude Code you can also use `/plugin marketplace add NombaOSS/skills` and then `/plugin install nomba@nomba`.
 
 ## Settings
 
